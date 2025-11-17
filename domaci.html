@@ -1,0 +1,540 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>domaci</title>
+<meta name="generator" content="MATLAB 25.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2025-11-10">
+<meta name="DC.source" content="domaci.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#2">Data loading</a>
+</li>
+<li>
+<a href="#3">Pole-zero plotting</a>
+</li>
+<li>
+<a href="#4">Autocorrleation method</a>
+</li>
+<li>
+<a href="#5">Modified covariant</a>
+</li>
+<li>
+<a href="#6">Compare</a>
+</li>
+<li>
+<a href="#7">Akaike</a>
+</li>
+<li>
+<a href="#8">Graphs</a>
+</li>
+</ul>
+</div>
+<pre class="codeinput">clear; close <span class="string">all</span>; clc;
+</pre>
+<h2 id="2">Data loading</h2>
+<pre class="codeinput">data = load(<span class="string">'podaci.mat'</span>);
+fieldnames(data)
+data.A
+summary(data.x)
+data.x(:,1:5)
+</pre>
+<pre class="codeoutput">
+ans =
+
+  2&times;1 cell array
+
+    {'A'}
+    {'x'}
+
+
+ans =
+
+    1.0000   -1.5728    1.2818   -0.3576    0.0729
+
+
+1&times;512 double
+
+    &lt;strong&gt;NumMissing&lt;/strong&gt;            0  
+    &lt;strong&gt;Min       &lt;/strong&gt;      -8.0908  
+    &lt;strong&gt;Median    &lt;/strong&gt;      -0.0386  
+    &lt;strong&gt;Max       &lt;/strong&gt;      10.1424  
+    &lt;strong&gt;Mean      &lt;/strong&gt;      -0.0508  
+    &lt;strong&gt;Std       &lt;/strong&gt;       3.0926  
+
+
+ans =
+
+    0.5377    2.6795    1.2663   -0.3887   -0.9969
+
+</pre>
+<h2 id="3">Pole-zero plotting</h2>
+<pre class="codeinput">b = 1;
+A = data.A;
+p = roots(A);
+[theta, r] = cart2pol(real(p), imag(p));
+
+figure; hold <span class="string">on</span>;
+th = linspace(0, 2*pi, 512);
+plot(cos(th), sin(th), <span class="string">'k--'</span>, <span class="string">'LineWidth'</span>,1);
+plot(real(p), imag(p), <span class="string">'x'</span>, <span class="string">'MarkerSize'</span>,8, <span class="string">'LineWidth'</span>,1.5);
+plot(0,0,<span class="string">'o'</span>,<span class="string">'MarkerSize'</span>,6);
+axis <span class="string">equal</span>; grid <span class="string">on</span>;
+xlabel(<span class="string">'Real'</span>); ylabel(<span class="string">'Imag'</span>);
+title(<span class="string">'AR Poles and Unit Circle'</span>);
+hold <span class="string">off</span>;
+
+T = table(p, abs(p), angle(p), <span class="keyword">...</span>
+        <span class="string">'VariableNames'</span>,{<span class="string">'Zero'</span>,<span class="string">'Magnitude'</span>,<span class="string">'Angle'</span>})
+
+<span class="comment">% As we can observe, the pole with radius 0.9 and angle 0.7854 rad we expect</span>
+<span class="comment">% dominant sinusoidal component at 0.7854 rad/sample</span>
+<span class="comment">% Because of two complex conjugate roots we expect 4 peaks in spectre,</span>
+<span class="comment">% located at 0.7854 rad/sample and 1.0472 rad/sample</span>
+</pre>
+<pre class="codeoutput">
+T =
+
+  4&times;3 table
+
+         Zero          Magnitude     Angle 
+    _______________    _________    _______
+
+    0.6364+0.6364i        0.9        0.7854
+    0.6364-0.6364i        0.9       -0.7854
+      0.15+0.25981i       0.3        1.0472
+      0.15-0.25981i       0.3       -1.0472
+
+</pre>
+<h2 id="4">Autocorrleation method</h2>
+<pre class="codeinput">
+<span class="keyword">function</span> [A, sigma2] = ar_acf_yw(x, p)
+    N = length(x);
+    rxx = zeros(2*p+1,1);
+
+    <span class="keyword">for</span> k = (p+1):(2*p+1)
+        rxx(k) = sum(conj(x(1:(N-k+p+1))).*x(1+k-(p+1):N))/N;
+    <span class="keyword">end</span>
+    rxx(p:-1:1) = conj(rxx(p+2:end));
+
+    R = toeplitz(rxx(p+1:2*p), rxx((p+1):-1:2));
+    a = -R \ rxx(p+2:end);
+
+    sigma2 = rxx(p+1) + sum(a.*rxx(p:-1:1));
+    A = [1 a'];
+<span class="keyword">end</span>
+</pre>
+<h2 id="5">Modified covariant</h2>
+<pre class="codeinput">
+<span class="keyword">function</span> [A, sigma2] = ar_mcov(x, p)
+    N = length(x);
+
+    <span class="comment">% Forward prediction</span>
+    nf = (p+1):N;
+    L = numel(nf); <span class="comment">% N-p</span>
+    Xf = zeros(p+1,L);
+    <span class="keyword">for</span> l = 0:p
+        Xf(l+1,:) = x(nf-l).';
+    <span class="keyword">end</span>
+    y_f = Xf(1,:).';
+
+    <span class="comment">% Backward prediction</span>
+    nb = 1:(N-p);
+    Xb = zeros(p+1, L);
+    <span class="keyword">for</span> l = 0:p
+        Xb(l+1,:) = x(nb - 1 + l + 1).';
+    <span class="keyword">end</span>
+    y_b = Xb(1,:).';
+
+    C = (Xf*Xf' + Xb*Xb') / L;
+
+    R = C(2:end, 2:end);
+    d = C(2:end, 1);
+    a = -R \ d;
+
+    A = [1 a'];
+
+    ef = y_f + (a.' * Xf(2:end,:)).';
+    eb = y_b + (conj(a).' * Xb(2:end,:)).';
+    sigma2 = 0.5*(mean(abs(ef).^2) + mean(abs(eb).^2));
+<span class="keyword">end</span>
+</pre>
+<pre class="codeoutput">
+R =
+
+  4&times;7 table
+
+           Metoda           a0      a1         a2         a3          a4        sigma2 
+    ____________________    __    _______    ______    ________    _________    _______
+
+    "YW (implemented)"      1     -1.4582    1.0461    -0.11138    -0.041398     1.1696
+    "YW (built-in)"         1     -1.4582    1.0461    -0.11138    -0.041398     1.1696
+    "MCOV (implemented)"    1     -1.5637    1.2152    -0.24106    -0.013184    0.99265
+    "MCOV (built-in)"       1     -1.5637    1.2152    -0.24106    -0.013184    0.99265
+
+</pre>
+<h2 id="6">Compare</h2>
+<pre class="codeinput">x = data.x; p = 4;
+[A_yw, s2_yw] = ar_acf_yw(x, p);
+[A_mcov, s2_mcov] = ar_mcov(x, p);
+[A_yw_b, s2_yw_b] = aryule(x, p);
+[A_mcov_b, s2_mcov_b] = armcov(x, p);
+
+A_yw = A_yw(:).';
+A_mcov = A_mcov(:).';
+A_yw_b = A_yw_b(:).';
+A_mcov_b = A_mcov_b(:).';
+
+labels = [<span class="string">"YW (implemented)"</span>; <span class="string">"YW (built-in)"</span>; <span class="string">"MCOV (implemented)"</span>; <span class="string">"MCOV (built-in)"</span>];
+Aall   = [A_yw; A_yw_b; A_mcov; A_mcov_b];
+s2all  = [s2_yw; s2_yw_b; s2_mcov; s2_mcov_b];
+
+R = table(labels, <span class="keyword">...</span>
+    Aall(:,1), Aall(:,2), Aall(:,3), Aall(:,4), Aall(:,5), s2all, <span class="keyword">...</span>
+    <span class="string">'VariableNames'</span>,{<span class="string">'Metoda'</span>, <span class="string">'a0'</span>, <span class="string">'a1'</span>, <span class="string">'a2'</span>, <span class="string">'a3'</span>, <span class="string">'a4'</span>, <span class="string">'sigma2'</span>})
+</pre>
+<h2 id="7">Akaike</h2>
+<pre class="codeinput">
+<span class="keyword">function</span> aic = aic_ar(sigma2, k, N)
+    aic = N .* log(sigma2) + 2 .* k;
+<span class="keyword">end</span>
+
+N = numel(x);
+orders = 1:10;
+
+aic_vals = zeros(size(orders));
+s2_vals = zeros(size(orders));
+A_cells = cell(numel(orders), 1);
+
+<span class="keyword">for</span> i = 1:numel(orders)
+    p = orders(i);
+    [A, s2] = ar_acf_yw(x, p);
+    s2_vals(i) = s2;
+    aic_vals(i) = aic_ar(s2, p, N);
+    A_cells{i} = A(:).';
+<span class="keyword">end</span>
+
+[bestAIC,idx] = min(aic_vals);
+p_opt = orders(idx);
+A_opt = A_cells{idx};
+
+figure; hold <span class="string">on</span>;
+plot(orders, aic_vals, <span class="string">'o-'</span>, <span class="string">'LineWidth'</span>,1.5); grid <span class="string">on</span>;
+xline(p_opt, <span class="string">'--'</span>);
+plot(p_opt, bestAIC, <span class="string">'rx'</span>, <span class="string">'MarkerSize'</span>,10, <span class="string">'LineWidth'</span>,2);
+xlabel(<span class="string">'AR order p'</span>); ylabel(<span class="string">'AIC'</span>);
+title(<span class="string">'AIC vs. AR order (YW/ACF)'</span>);
+legend(<span class="string">'AIC'</span>,<span class="string">'p_{opt}'</span>,<span class="string">'Location'</span>,<span class="string">'best'</span>);
+hold <span class="string">off</span>;
+</pre>
+<img vspace="5" hspace="5" src="domaci_01.png" alt=""> <img vspace="5" hspace="5" src="domaci_02.png" alt=""> <h2 id="8">Graphs</h2>
+<pre class="codeinput">A_true = data.A(:).';
+e_true = filter(A_true, 1, x);
+s2_true = mean(abs(e_true).^2);
+
+nfft = 2048;
+w = linspace(0, pi, nfft);
+
+H_true = freqz(1, A_true, w);
+S_theory = s2_true .* (abs(H_true).^2);
+
+[A_yw_opt, s2_yw_opt] = ar_acf_yw(x, p_opt);
+[A_mcov_opt, s2_mcov_opt] = ar_mcov(x, p_opt);
+[A_yw_b_opt, s2_yw_b_opt] = aryule(x, p_opt);
+[A_mcov_b_opt, s2_mcov_b_opt] = armcov(x, p_opt);
+
+H_yw = freqz(1, A_yw_opt, w);
+H_mcov = freqz(1, A_mcov_opt, w);
+H_yw_b = freqz(1, A_yw_b_opt, w);
+H_mcov_b = freqz(1, A_mcov_b_opt, w);
+
+S_yw = s2_yw_opt .* (abs(H_yw).^2);
+S_mcov   = s2_mcov_opt .* (abs(H_mcov).^2);
+S_yw_b   = s2_yw_b_opt .* (abs(H_yw_b).^2);
+S_mcov_b = s2_mcov_b_opt .* (abs(H_mcov_b).^2);
+
+figure; hold <span class="string">on</span>; grid <span class="string">on</span>;
+plot(w/pi, 10*log10(S_theory),    <span class="string">'LineWidth'</span>,1.8);
+plot(w/pi, 10*log10(S_yw),        <span class="string">'LineWidth'</span>,1.2);
+plot(w/pi, 10*log10(S_mcov),      <span class="string">'LineWidth'</span>,1.2);
+plot(w/pi, 10*log10(S_yw_b),      <span class="string">'LineWidth'</span>,1.2);
+plot(w/pi, 10*log10(S_mcov_b),    <span class="string">'LineWidth'</span>,1.2);
+hold <span class="string">off</span>;
+
+xlabel(<span class="string">'Normalized frequency [\times\pi rad/sample)'</span>);
+ylabel(<span class="string">'PSD [db]'</span>);
+title(sprintf(<span class="string">'PSD: analytical and estimated for p_{opt} = %d'</span>, p_opt));
+legend(<span class="string">'Analytical'</span>, <span class="string">'YW (implemented)'</span>, <span class="string">'MCOV (implemented)'</span>, <span class="string">'YW (built-in)'</span>, <span class="keyword">...</span>
+ <span class="string">'MCOV (built-in)'</span>, <span class="string">'Location'</span>,<span class="string">'best'</span>);
+xlim([0 1]);
+</pre>
+<img vspace="5" hspace="5" src="domaci_03.png" alt=""> <img vspace="5" hspace="5" src="domaci_04.png" alt=""> <p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+clear; close all; clc;
+
+%% Data loading
+
+data = load('podaci.mat');
+fieldnames(data)
+data.A
+summary(data.x)
+data.x(:,1:5)
+
+%% Pole-zero plotting
+
+b = 1;
+A = data.A;
+p = roots(A);
+[theta, r] = cart2pol(real(p), imag(p));
+
+figure; hold on;
+th = linspace(0, 2*pi, 512);
+plot(cos(th), sin(th), 'kREPLACE_WITH_DASH_DASH', 'LineWidth',1);
+plot(real(p), imag(p), 'x', 'MarkerSize',8, 'LineWidth',1.5);
+plot(0,0,'o','MarkerSize',6);
+axis equal; grid on;
+xlabel('Real'); ylabel('Imag');
+title('AR Poles and Unit Circle');
+hold off;
+
+T = table(p, abs(p), angle(p), ...
+        'VariableNames',{'Zero','Magnitude','Angle'})
+
+% As we can observe, the pole with radius 0.9 and angle 0.7854 rad we expect
+% dominant sinusoidal component at 0.7854 rad/sample
+% Because of two complex conjugate roots we expect 4 peaks in spectre,
+% located at 0.7854 rad/sample and 1.0472 rad/sample
+
+%% Autocorrleation method
+
+function [A, sigma2] = ar_acf_yw(x, p)
+    N = length(x);
+    rxx = zeros(2*p+1,1);
+
+    for k = (p+1):(2*p+1)
+        rxx(k) = sum(conj(x(1:(N-k+p+1))).*x(1+k-(p+1):N))/N;
+    end
+    rxx(p:-1:1) = conj(rxx(p+2:end));
+
+    R = toeplitz(rxx(p+1:2*p), rxx((p+1):-1:2));
+    a = -R \ rxx(p+2:end);
+
+    sigma2 = rxx(p+1) + sum(a.*rxx(p:-1:1));
+    A = [1 a'];
+end
+
+
+%% Modified covariant
+
+function [A, sigma2] = ar_mcov(x, p)
+    N = length(x);
+
+    % Forward prediction
+    nf = (p+1):N;
+    L = numel(nf); % N-p
+    Xf = zeros(p+1,L);
+    for l = 0:p
+        Xf(l+1,:) = x(nf-l).';
+    end
+    y_f = Xf(1,:).';
+
+    % Backward prediction
+    nb = 1:(N-p);
+    Xb = zeros(p+1, L);
+    for l = 0:p
+        Xb(l+1,:) = x(nb - 1 + l + 1).';
+    end
+    y_b = Xb(1,:).';
+
+    C = (Xf*Xf' + Xb*Xb') / L;
+
+    R = C(2:end, 2:end);
+    d = C(2:end, 1);
+    a = -R \ d;
+
+    A = [1 a'];
+
+    ef = y_f + (a.' * Xf(2:end,:)).';
+    eb = y_b + (conj(a).' * Xb(2:end,:)).';
+    sigma2 = 0.5*(mean(abs(ef).^2) + mean(abs(eb).^2));
+end
+
+%% Compare
+
+x = data.x; p = 4;
+[A_yw, s2_yw] = ar_acf_yw(x, p);
+[A_mcov, s2_mcov] = ar_mcov(x, p);
+[A_yw_b, s2_yw_b] = aryule(x, p);
+[A_mcov_b, s2_mcov_b] = armcov(x, p);
+
+A_yw = A_yw(:).';
+A_mcov = A_mcov(:).';
+A_yw_b = A_yw_b(:).';
+A_mcov_b = A_mcov_b(:).';
+
+labels = ["YW (implemented)"; "YW (built-in)"; "MCOV (implemented)"; "MCOV (built-in)"];
+Aall   = [A_yw; A_yw_b; A_mcov; A_mcov_b];
+s2all  = [s2_yw; s2_yw_b; s2_mcov; s2_mcov_b];
+
+R = table(labels, ...
+    Aall(:,1), Aall(:,2), Aall(:,3), Aall(:,4), Aall(:,5), s2all, ...
+    'VariableNames',{'Metoda', 'a0', 'a1', 'a2', 'a3', 'a4', 'sigma2'})
+
+
+%% Akaike
+
+function aic = aic_ar(sigma2, k, N)
+    aic = N .* log(sigma2) + 2 .* k;
+end
+
+N = numel(x);
+orders = 1:10;
+
+aic_vals = zeros(size(orders));
+s2_vals = zeros(size(orders));
+A_cells = cell(numel(orders), 1);
+
+for i = 1:numel(orders)
+    p = orders(i);
+    [A, s2] = ar_acf_yw(x, p);
+    s2_vals(i) = s2;
+    aic_vals(i) = aic_ar(s2, p, N);
+    A_cells{i} = A(:).';
+end
+
+[bestAIC,idx] = min(aic_vals);
+p_opt = orders(idx);
+A_opt = A_cells{idx};
+
+figure; hold on;
+plot(orders, aic_vals, 'o-', 'LineWidth',1.5); grid on;
+xline(p_opt, 'REPLACE_WITH_DASH_DASH');
+plot(p_opt, bestAIC, 'rx', 'MarkerSize',10, 'LineWidth',2);
+xlabel('AR order p'); ylabel('AIC');
+title('AIC vs. AR order (YW/ACF)');
+legend('AIC','p_{opt}','Location','best');
+hold off;
+
+%% Graphs
+
+A_true = data.A(:).';
+e_true = filter(A_true, 1, x);
+s2_true = mean(abs(e_true).^2);
+
+nfft = 2048;
+w = linspace(0, pi, nfft);
+
+H_true = freqz(1, A_true, w);
+S_theory = s2_true .* (abs(H_true).^2);
+
+[A_yw_opt, s2_yw_opt] = ar_acf_yw(x, p_opt);
+[A_mcov_opt, s2_mcov_opt] = ar_mcov(x, p_opt);
+[A_yw_b_opt, s2_yw_b_opt] = aryule(x, p_opt);
+[A_mcov_b_opt, s2_mcov_b_opt] = armcov(x, p_opt);
+
+H_yw = freqz(1, A_yw_opt, w);
+H_mcov = freqz(1, A_mcov_opt, w);
+H_yw_b = freqz(1, A_yw_b_opt, w);
+H_mcov_b = freqz(1, A_mcov_b_opt, w);
+
+S_yw = s2_yw_opt .* (abs(H_yw).^2);
+S_mcov   = s2_mcov_opt .* (abs(H_mcov).^2);
+S_yw_b   = s2_yw_b_opt .* (abs(H_yw_b).^2);
+S_mcov_b = s2_mcov_b_opt .* (abs(H_mcov_b).^2);
+
+figure; hold on; grid on;
+plot(w/pi, 10*log10(S_theory),    'LineWidth',1.8);
+plot(w/pi, 10*log10(S_yw),        'LineWidth',1.2);
+plot(w/pi, 10*log10(S_mcov),      'LineWidth',1.2);
+plot(w/pi, 10*log10(S_yw_b),      'LineWidth',1.2);
+plot(w/pi, 10*log10(S_mcov_b),    'LineWidth',1.2);
+hold off;
+
+xlabel('Normalized frequency [\times\pi rad/sample)');
+ylabel('PSD [db]');
+title(sprintf('PSD: analytical and estimated for p_{opt} = %d', p_opt));
+legend('Analytical', 'YW (implemented)', 'MCOV (implemented)', 'YW (built-in)', ...
+ 'MCOV (built-in)', 'Location','best');
+xlim([0 1]);
+##### SOURCE END #####
+-->
+</body>
+</html>

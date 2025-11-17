@@ -1,0 +1,15 @@
+*
+
+!.gitignore
+
+!*/
+
+!*.html
+!*.png
+!*.pdf
+
+figs/**
+skrita_som.pdf
+izvestaj.pdf
+domaci*.png
+main.pdf
